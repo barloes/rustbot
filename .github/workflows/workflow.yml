@@ -31,9 +31,11 @@ jobs:
         IMAGE_TAG: latest
       working-directory: ./rustbot
       run: |
+        # delete the existing image
+        aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageTag=latest
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker buildx build --platform linux/arm64/v8 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
