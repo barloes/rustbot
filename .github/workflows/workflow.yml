@@ -43,7 +43,7 @@ jobs:
           - name: Build, tag, and push image to Amazon ECR
       
     - name: restart ec2
-      id: build-image
+      id: restart-ec2
       env:
         INSTANCE_ID: i-0f122ad67193a6e71
       run: |
