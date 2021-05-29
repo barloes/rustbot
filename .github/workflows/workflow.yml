@@ -23,12 +23,13 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Delete, Build, tag, and push image to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: imagerepo
         IMAGE_TAG: latest
+        INSTANCE_ID:
       working-directory: ./rustbot
       run: |
         # delete the existing image
@@ -39,3 +40,12 @@ jobs:
         docker buildx build --platform linux/arm64/v8 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          - name: Build, tag, and push image to Amazon ECR
+      name: restart ec2
+      id: build-image
+      env:
+        INSTANCE_ID: i-0f122ad67193a6e71
+      run: |
+        aws ec2 reboot-instances --instance-ids $INSTANCE_ID
+
+        
