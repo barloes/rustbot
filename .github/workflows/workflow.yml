@@ -55,7 +55,7 @@ jobs:
     - name: start ec2
       id: start-ec2
       env:
-        INSTANCE_ID: ${{steps.stop-ec2.env.INSTANCE_ID}}
+        INSTANCE_ID: i-0f122ad67193a6e71
       run: |
         aws ec2 start-instances --instance-ids $INSTANCE_ID
 
