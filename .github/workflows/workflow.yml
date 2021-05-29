@@ -46,6 +46,7 @@ jobs:
       env:
         INSTANCE_ID: i-0f122ad67193a6e71
       run: |
-        aws ec2 reboot-instances --instance-ids $INSTANCE_ID
+        aws ec2 stop-instances --instance-ids $INSTANCE_ID
+        aws ec2 start-instances --instance-ids $INSTANCE_ID
 
         
