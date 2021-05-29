@@ -6,7 +6,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
     - name: Checkout
@@ -41,12 +40,23 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       
-    - name: restart ec2
-      id: restart-ec2
+    - name: stop ec2
+      id: stop-ec2
       env:
         INSTANCE_ID: i-0f122ad67193a6e71
       run: |
         aws ec2 stop-instances --instance-ids $INSTANCE_ID
+
+    - name: Sleep for 30 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '30s'
+
+    - name: start ec2
+      id: start-ec2
+      env:
+        INSTANCE_ID: ${{steps.stop-ec2.env.INSTANCE_ID}}
+      run: |
         aws ec2 start-instances --instance-ids $INSTANCE_ID
 
         
