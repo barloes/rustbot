@@ -50,7 +50,7 @@ jobs:
     - name: Sleep for 30 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '30s'
+        time: '20s'
 
     - name: start ec2
       id: start-ec2

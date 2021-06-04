@@ -1,0 +1,21 @@
+//commands to download docker in linux ami
+#!/bin/bash
+sudo yum update -y
+sudo amazon-linux-extras install docker
+sudo yum install docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+
+
+//user data for ec2
+sudo su
+systemctl start docker
+systemctl enable docker
+systemctl restart docker
+
+aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 642151248908.dkr.ecr.ap-southeast-1.amazonaws.com
+docker pull 642151248908.dkr.ecr.ap-southeast-1.amazonaws.com/imagerepo:latest
+docker run -p 80:80 642151248908.dkr.ecr.ap-southeast-1.amazonaws.com/imagerepo:latest
+
+//command to change ec2 instance to standard cpucredits
+aws ec2 modify-instance-credit-specification --instance-credit-specification "InstanceId=i-0f122ad67193a6e71,CpuCredits=standard"
