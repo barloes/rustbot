@@ -36,7 +36,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: nginx
       working-directory: ./nginx
-      run: ./scripts/buildDocker.sh
+      run: ../scripts/buildDocker.sh
       
     - name: ec2 bash
       id: ec2-bash
