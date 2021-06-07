@@ -22,23 +22,15 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Delete, Build, tag, and push image to Amazon ECR
+    - name: Delete, Build, tag, and push image 1 to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: imagerepo
         IMAGE_TAG: latest
         INSTANCE_ID:
-      working-directory: ./rustbot
-      run: |
-        # delete the existing image
-        aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageTag=$IMAGE_TAG
-        # Build a docker container and
-        # push it to ECR so that it can
-        # be deployed to ECS.
-        docker buildx build --platform linux/arm64/v8 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      working-directory: ./nginx
+      run: ./scripts/buildDocker
 
     - name: Delete, Build, tag, and push image 2 to Amazon ECR
       id: build-image2
@@ -48,29 +40,8 @@ jobs:
         IMAGE_TAG: nginx
         INSTANCE_ID:
       working-directory: ./nginx
-      run: |
-        aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageTag=$IMAGE_TAG
-        docker buildx build --platform linux/arm64/v8 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      run: ./scripts/buildDocker
       
-    - name: stop ec2
-      id: stop-ec2
-      env:
-        INSTANCE_ID: i-0f122ad67193a6e71
-      run: |
-        aws ec2 stop-instances --instance-ids $INSTANCE_ID
-
-    - name: Sleep for 30 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '30s'
-
-    - name: start ec2
-      id: start-ec2
-      env:
-        INSTANCE_ID: i-0f122ad67193a6e71
-      run: |
-        aws ec2 start-instances --instance-ids $INSTANCE_ID
-
-        
+    - name: ec2 bash
+      id: ec2 bash
+      run: ./scripts/modifyec2.sh
