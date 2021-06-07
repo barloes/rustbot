@@ -41,7 +41,7 @@ jobs:
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Delete, Build, tag, and push image 2 to Amazon ECR
-      id: build-image
+      id: build-image2
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: imagerepo
