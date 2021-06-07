@@ -40,4 +40,4 @@ jobs:
       
     - name: ec2 bash
       id: ec2-bash
-      run: ./scripts/modifyInstance.sh
+      run: ./scripts/restartInstance.sh
