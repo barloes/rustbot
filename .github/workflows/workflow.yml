@@ -43,5 +43,5 @@ jobs:
       run: ./scripts/buildDocker
       
     - name: ec2 bash
-      id: ec2 bash
+      id: ec2-bash
       run: ./scripts/modifyec2.sh
