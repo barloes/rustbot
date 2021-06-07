@@ -30,7 +30,7 @@ jobs:
         IMAGE_TAG: latest
         INSTANCE_ID:
       working-directory: ./nginx
-      run: ./scripts/buildDocker
+      run: ./scripts/buildDocker.sh
 
     - name: Delete, Build, tag, and push image 2 to Amazon ECR
       id: build-image2
@@ -40,8 +40,8 @@ jobs:
         IMAGE_TAG: nginx
         INSTANCE_ID:
       working-directory: ./nginx
-      run: ./scripts/buildDocker
+      run: ./scripts/buildDocker.sh
       
     - name: ec2 bash
       id: ec2-bash
-      run: ./scripts/modifyec2.sh
+      run: ./scripts/modifyInstance.sh
