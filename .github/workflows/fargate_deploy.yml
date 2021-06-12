@@ -31,7 +31,7 @@ jobs:
       run: ../scripts/buildDocker.sh fargate
 
     - name: register new task definition
-      id: build-image
+      id: reigster-task
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: notmaster
