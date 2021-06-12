@@ -18,6 +18,8 @@ register_task(){
     jq '.containerDefinitions[0].image="'"$NEW_IMAGE_URL"'"' task-definitions.json > tmp.$$.json && mv tmp.$$.json task-definitions.json
 
     aws ecs register-task-definition  --family $SERVICE --cli-input-json file://task-definitions.json
+
+    aws ecs update-service --cluster $SERVICE --service $SERVICE --task-definition $SERVICE --force-new-deployment
 }
 
 register_task $1
