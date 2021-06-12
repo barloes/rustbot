@@ -5,7 +5,7 @@ echo $instanceId
 
 
 aws ec2 stop-instances --instance-ids $instanceId
-sleep 30
+sleep 40
 aws ec2 start-instances --instance-ids $instanceId
 
         
