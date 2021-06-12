@@ -7,7 +7,6 @@ register_task(){
     aws ecs describe-task-definition --task-definition $SERVICE \
         --query '{  containerDefinitions: taskDefinition.containerDefinitions,
                     family: taskDefinition.family,
-                    taskRoleArn: taskDefinition.taskRoleArn,
                     executionRoleArn: taskDefinition.executionRoleArn,
                     networkMode: taskDefinition.networkMode,
                     volumes: taskDefinition.volumes,
