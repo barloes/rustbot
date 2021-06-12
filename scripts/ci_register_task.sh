@@ -2,7 +2,6 @@
 
 register_task(){
     SERVICE=$1
-    IMAGE_TAG="notmaster"
     NEW_IMAGE_URL="${ECR_REGISTRY}/${SERVICE}:${IMAGE_TAG}"
 
     aws ecs describe-task-definition --task-definition $SERVICE \
@@ -19,7 +18,7 @@ register_task(){
     
     jq '.containerDefinitions[0].image="'"$NEW_IMAGE_URL"'"' task-definitions.json > tmp.$$.json && mv tmp.$$.json task-definitions.json
 
-    aws ecs register-task-definition  --family $SERVICE --cli-input-json "$NEW_TASK_DEFINTION"
+    aws ecs register-task-definition  --family $SERVICE --cli-input-json file://task-definitions.json
 }
 
 register_task $1
